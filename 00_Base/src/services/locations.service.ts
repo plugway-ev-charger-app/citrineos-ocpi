@@ -397,7 +397,15 @@ export class LocationsService {
   /**
    * Helper Methods
    */
-
+  public async updateChargingStationAndEvseAvailabilityByConnector(
+    stationId:string,
+    connectorStatus:any,
+    chargingStationAttributes:any,
+    evseId?:number,
+    connectorId?:number
+  ){
+    this.deviceModelRepository.findChargingStationById(stationId, connectorStatus, chargingStationAttributes, evseId,connectorId);
+  }
   public async createChargingStationVariableAttributesMap(
     stationIds: string[],
     evseId?: number,
