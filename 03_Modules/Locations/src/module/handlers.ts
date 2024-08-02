@@ -186,7 +186,6 @@ export class LocationsHandlers extends AbstractModule {
     props?: HandlerProperties,
   ): Promise<void> {
     this._logger.debug('StatusNotification received:', message, props);
-    this._logger.debug('Inside ocpi status notification');
     const stationId = message.context.stationId;
     const evseId = message.payload.evseId;
     const connectorId = message.payload.connectorId;
@@ -212,13 +211,7 @@ export class LocationsHandlers extends AbstractModule {
           )
       : [];
     connectorAvailabilityStates.push(message.payload.connectorStatus);
-    this._logger.debug('Charging station attributes');
-    this._logger.debug(chargingStationAttributes);
-    this._logger.debug('Evse attributes');
-    this._logger.debug(evseAttributes);
-    this._logger.debug('Connector attributes');
-    this._logger.debug(connectorAvailabilityStates);
-    this.locationsService.updateChargingStationAndEvseAvailabilityByConnector(stationId, connectorAvailabilityStates, chargingStationAttributes, evseId,connectorId);
+    this.locationsDatasource.updateChargingStationAndEvseAvailabilityByConnector(stationId, connectorAvailabilityStates, chargingStationAttributes, evseId,connectorId);
     const partialEvse: Partial<EvseDTO> = {};
     partialEvse.status =
       LocationMapper.mapConnectorAvailabilityStatesToEvseStatus(
@@ -226,8 +219,6 @@ export class LocationsHandlers extends AbstractModule {
         chargingStationAttributes?.bay_occupancy_sensor_active,
       );
     partialEvse.last_updated = new Date(message.payload.timestamp);
-    this._logger.debug("partial evse");
-    this._logger.debug(partialEvse);
     await this.locationsBroadcaster.broadcastOnEvseUpdate(
       stationId,
       evseId,

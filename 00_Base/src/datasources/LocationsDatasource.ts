@@ -513,4 +513,14 @@ export class LocationsDatasource {
           .filter((id) => !idToCompare || id === idToCompare)
       : [];
   }
+
+  public async updateChargingStationAndEvseAvailabilityByConnector(
+    stationId:string,
+    connectorStatus:any,
+    chargingStationAttributes:any,
+    evseId?:number,
+    connectorId?:number
+  ){
+    this.deviceModelRepository.findChargingStationById(stationId, connectorStatus, chargingStationAttributes, evseId,connectorId);
+  }
 }
